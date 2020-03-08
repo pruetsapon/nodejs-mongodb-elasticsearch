@@ -37,6 +37,18 @@ class BookController {
         }
     }
 
+    async update(req, res) {
+        try {
+            const { id } = req.params;
+            const { body } = req;
+            const result = await this.bookService.update(id, body);
+            res.send(result);
+        } catch (err) {
+            console.error(err.message);
+            res.send(err);
+        }
+    }
+
     async delete(req, res) {
         try {
             const { id } = req.params;

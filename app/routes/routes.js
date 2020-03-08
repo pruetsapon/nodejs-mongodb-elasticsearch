@@ -19,6 +19,15 @@ module.exports.register = (server, serviceLocator) => {
             serviceLocator.get('bookController').get(req, res, next)
     );
 
+    server.put(
+        {
+            path: '/book/:id',
+            name: 'Update book by id'
+        },
+        (req, res, next) =>
+            serviceLocator.get('bookController').update(req, res, next)
+    );
+
     server.del(
         {
             path: '/book/:id',

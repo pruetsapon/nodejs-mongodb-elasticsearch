@@ -35,6 +35,12 @@ const bookSchema = new mongoose.Schema({
         es_type: 'text',
         es_fielddata: true,
         es_indexed: true
+    },
+    updateOn: {
+        type: Date,
+        es_type: 'text',
+        es_fielddata: true,
+        es_indexed: true
     }
 });
 

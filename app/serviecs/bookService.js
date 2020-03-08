@@ -17,7 +17,6 @@ class BookService {
         book.thumbnail = input.thumbnail;
         book.createOn = new Date();
         book = await book.save();
-        book = await Book.findOne({ _id: book._id }, { _id: 0, __v: 0 });
         console.info('Book Created Successfully');
         return book;
     } 
@@ -82,6 +81,24 @@ class BookService {
         return book;
     }
 
+    async update(id, input) {
+        const Book = this.mongoose.model('Book');
+        let book = await Book.findById({ _id: id });
+        if (book) {
+            book.name = input.name;
+            book.detail = input.detail;
+            book.tags = input.tags;
+            book.category = input.category;
+            book.thumbnail = input.thumbnail;
+            book.updateOn = new Date();
+            book = await book.save();
+            console.info('Book Updated Successfully');
+            return book;
+        } else {
+            return `Book id ${id} does not exists`;
+        }
+    }
+
     async delete(id) {
         const Book = this.mongoose.model('Book');
         let book = await Book.findById({ _id: id });
@@ -116,6 +133,8 @@ const getSort = (order) => {
         sort.push({'tags': {'order': sortBy}});
     } else if(orders[0] == 'createOn') {
         sort.push({'createOn': {'order': sortBy}});
+    } else if(orders[0] == 'updateOn') {
+        sort.push({'updateOn': {'order': sortBy}});
     }
     return sort;
 }
