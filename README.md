@@ -1,1 +1,0 @@
-# nodejs-mongodb-elasticsearch-example
