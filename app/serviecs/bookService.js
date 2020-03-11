@@ -57,10 +57,10 @@ class BookService {
         };
 
         let results = await this.elasticsearch.search(Book, query, option);
-        let count = await this.elasticsearch.count(Book, query);
-        if(count > 0) {
+        let bookCount = await this.elasticsearch.count("books", query);
+        if(bookCount.count > 0) {
             docs.count = results.hits.hits.length;
-            docs.totalPage = Math.ceil(count / rows);
+            docs.totalPage = Math.ceil(bookCount.count / rows);
             docs.data = results.hits.hits;
         } else {
             docs.count = 0;

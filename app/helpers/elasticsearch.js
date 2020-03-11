@@ -1,3 +1,6 @@
+const rp = require('request-promise');
+const config = require('../configs/config');
+
 class Elasticsearch {
     constructor() {}
 
@@ -14,20 +17,17 @@ class Elasticsearch {
     }
 
     async count(model, query) {
-        const option = {
-            from: 0,
-            size: 1,
-            scroll: '1000m'
+        let options = {
+            method: 'GET',
+            uri: `http://${config.elastic.host}:${config.elastic.port}/${model}/_count`,
+            json: true,
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: { query }
         };
-        return new Promise((resolve, reject) => {
-            model.search(query, option, (err, results) => {
-                if(err) {
-                    resolve(err);
-                } else {
-                    resolve(results.hits.total.value);
-                }
-            });
-        });
+        let count = await rp(options);
+        return count;
     }
 
     async synchronize(model) {
