@@ -1,3 +1,6 @@
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+
 require('dotenv').config();
 const config = require('./app/configs/config');
 const restify = require('restify');
@@ -45,6 +48,21 @@ handler.register(server);
 routes.register(server, serviceLocator);
 
 // start server
-server.listen(config.app.port, () => {
-  console.info(`${config.app.name} Server is running on port - ${config.app.port}`);
-});
+// server.listen(config.app.port, () => {
+//   console.info(`${config.app.name} Server is running on port - ${config.app.port}`);
+// });
+
+// start server with cluster
+if (cluster.isMaster) {
+  console.log(`Master ${process.pid} is running`);
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+  });
+} else {
+  server.listen(config.app.port, () => {
+    console.info(`${config.app.name} Server is running on port - ${config.app.port}`);
+  });
+}
