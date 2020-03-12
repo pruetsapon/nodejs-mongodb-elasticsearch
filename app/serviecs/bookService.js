@@ -39,7 +39,8 @@ class BookService {
             hydrate: true,
             hydrateOptions: {
                 select: 'bookId name detail tags category thumbnail createOn'
-            }
+            },
+            track_total_hits: true
         };
         if(order != undefined && order != '') {
             option.sort = getSort(order);
@@ -57,10 +58,9 @@ class BookService {
         };
 
         let results = await this.elasticsearch.search(Book, query, option);
-        let bookCount = await this.elasticsearch.count("books", query);
-        if(bookCount.count > 0) {
+        if(results.hits != undefined) {
             docs.count = results.hits.hits.length;
-            docs.totalPage = Math.ceil(bookCount.count / rows);
+            docs.totalPage = Math.ceil(results.hits.total.value / rows);
             docs.data = results.hits.hits;
         } else {
             docs.count = 0;
