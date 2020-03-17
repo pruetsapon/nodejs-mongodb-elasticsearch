@@ -128,9 +128,9 @@ const getSort = (order) => {
     let sortBy = orders[1] == undefined ? 'asc' : orders[1];
     let sort = [];
     if(orders[0] == 'name') {
-        sort.push({'name': {'order': sortBy}});
+        sort.push({'name.keyword': {'order': sortBy}});
     } else if(orders[0] == 'tags') {
-        sort.push({'tags': {'order': sortBy}});
+        sort.push({'tags.keyword': {'order': sortBy}});
     } else if(orders[0] == 'createOn') {
         sort.push({'createOn': {'order': sortBy}});
     } else if(orders[0] == 'updateOn') {
